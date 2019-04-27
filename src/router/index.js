@@ -4,9 +4,6 @@ import OrderList from '@/components/order/OrderList'
 import Account from '@/components/account/Account'
 import Department from '@/components/account/Department'
 import OPHistory from '@/components/account/OPHistory'
-// import Posts from '@/components/Posts'
-// import NewPost from '@/components/NewPost'
-// import EditPost from '@/components/EditPost'
 
 Vue.use(Router)
 

@@ -1,22 +1,15 @@
 <template>
   <div class="container">
-    <div v-if="isMain">
-      <header class="header">
-        <nav class="hd-inner">
-          <router-link class="logo" to="/" exact>
-            <span></span>
-          </router-link>
-          <a href="javascript:;" class="logout" @click="logout">退出</a>
-        </nav>
-      </header>
-      <div class="main" :style="'height:' + viewHeight + 'px'">
-        <Navigator class="sidebar"></Navigator>
-        <transition name="fade" mode="out-in">
-          <router-view class="view"></router-view>
-        </transition>
-      </div>
-    </div>
-    <div v-else>
+    <header class="header">
+      <nav class="hd-inner">
+        <router-link class="logo" to="/" exact>
+          <span></span>
+        </router-link>
+        <a href="javascript:;" class="logout" @click="logout">退出</a>
+      </nav>
+    </header>
+    <div class="main" :style="'height:' + viewHeight + 'px'">
+      <Navigator class="sidebar"></Navigator>
       <transition name="fade" mode="out-in">
         <router-view class="view"></router-view>
       </transition>
@@ -39,8 +32,11 @@ export default {
     }
   },
   methods: {
-    logout() {
-      console.log('lll')
+    async logout() {
+      let res = await this.$http.get(this.api.logout, { user: this.userinfo })
+      if (res.errNo === 0) {
+        this.$router.push('/account/account')
+      }
     }
   },
   mounted() {

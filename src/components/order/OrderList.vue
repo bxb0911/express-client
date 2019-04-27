@@ -18,13 +18,9 @@ export default {
   },
   methods: {
     async getOrderList() {
-      try {
-        let res = await this.$http.get(this.api.order, { user: this.userinfo })
-        if (res.errNo === 0) {
-          this.data = res.data
-        }
-      } catch (err) {
-        console.error(err)
+      let res = await this.$http.get(this.api.order, { user: this.userinfo })
+      if (res.errNo === 0) {
+        this.data = res.data
       }
     }
   }
