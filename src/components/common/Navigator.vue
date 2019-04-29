@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .navigator {
     position: relative;
     min-width: 200px;

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '@/components/login/Login'
 import OrderList from '@/components/order/OrderList'
 import Account from '@/components/account/Account'
 import Department from '@/components/account/Department'
@@ -17,6 +18,12 @@ export default new Router({
   fallback: false,
   scrollBehavior: () => ({ y: 0 }),
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      hide: true
+    },
     {
       path: '/order',
       label: '订单查询',

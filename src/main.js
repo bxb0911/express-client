@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import './assets/base.less'
+import './assets/base.scss'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import Http from './services/http'

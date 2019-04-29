@@ -24,6 +24,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html, body {
+	height: 100%;
+}
 body {
 	line-height: 1;
 }
@@ -53,11 +56,10 @@ body {
 	background-color: #fff;
 }
 
-/* functions */
-/* 只显示指定行的内容，超出省略 */
-.clamp-(@line) {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: @line;
-  -webkit-box-orient: vertical;
-}
+/* 改变主题色变量 */
+$--color-primary: #3BCA7D;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";

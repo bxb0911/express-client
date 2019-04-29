@@ -1,17 +1,24 @@
 <template>
   <div class="container">
-    <header class="header">
-      <nav class="hd-inner">
-        <router-link class="logo" to="/" exact>
-          <span></span>
-        </router-link>
-        <a href="javascript:;" class="logout" @click="logout">退出</a>
-      </nav>
-    </header>
-    <div class="main" :style="'height:' + viewHeight + 'px'">
-      <Navigator class="sidebar"></Navigator>
+    <div v-if="hasMenu">
+      <header class="header">
+        <nav class="hd-inner">
+          <router-link class="logo" to="/" exact>
+            <span></span>
+          </router-link>
+          <a href="javascript:;" class="logout" @click="logout">退出</a>
+        </nav>
+      </header>
+      <div class="main" :style="'height:' + viewHeight + 'px'">
+        <Navigator class="sidebar"></Navigator>
+        <transition name="fade" mode="out-in">
+          <router-view class="view main"></router-view>
+        </transition>
+      </div>
+    </div>
+    <div v-else>
       <transition name="fade" mode="out-in">
-        <router-view class="view"></router-view>
+        <router-view class="view nomenu"></router-view>
       </transition>
     </div>
   </div>
@@ -28,7 +35,7 @@ export default {
     return {
       visible: false,
       viewHeight: 0,
-      isMain: true
+      hasMenu: true
     }
   },
   methods: {
@@ -40,18 +47,16 @@ export default {
     }
   },
   mounted() {
-    this.viewHeight = document.body.offsetHeight - 60
+    this.viewHeight = document.body.offsetHeight - 70
   }
 }
 </script>
 
-<style lang="less">
-  @hdm-green: #3BCA7D;
-  html, body, .container {
-    height: 100%;
-  }
+<style lang="scss">
+  $rezenMain:#3BCA7D;
   .container {
     min-width: 600px;
+    height: 100%;
     .header {
       min-width: 350px;
       position: fixed;
@@ -74,7 +79,7 @@ export default {
           text-align: center;
           color: #FFF;
           font-size: 24px;
-          background: #3BCA7D;
+          background: $rezenMain;
         }
         .logout {
           font-size: 14px;
@@ -83,11 +88,10 @@ export default {
           right: 40px;
           top: 0;
           &:active {
-            color: @hdm-green;
+            color: $rezenMain;
           }
         }
       }
-
     }
     .main {
       overflow-x: hidden;
@@ -105,8 +109,11 @@ export default {
         flex-grow: 1;
         flex-shrink: 1;
         position: relative;
-        padding: 15px 20px;
+        padding: 20px;
         box-sizing: border-box;
+        &.main {
+          background: #F7F8FC;
+        }
       }
     }
     .fade-enter-active, .fade-leave-active {

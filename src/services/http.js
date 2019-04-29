@@ -3,7 +3,8 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 import api from './api'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+const mode = process.env.NODE_ENV
+axios.defaults.baseURL = mode === 'development' ? 'http://localhost:3000' : ''
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(response => {
