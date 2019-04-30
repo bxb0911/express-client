@@ -3,9 +3,9 @@
      <div class="lg-main">
        <div class="lg-bg"></div>
        <div class="lg-form">
-         <el-tabs v-model="activeTab" @tab-click="handleClick">
-          <el-tab-pane label="丽呈员工登录" name="first">
-            <el-form class="form" :model="userinfo" ref="userinfo" :rules="rules">
+         <el-tabs :class="!isForgetPassword ? 'main-tab' : 'sub-tab'" v-model="activeTab">
+          <el-tab-pane :label="isForgetPassword ? '找    回    密    码' : '丽呈员工登录'" name="first">
+            <el-form v-show="!isForgetPassword" class="form" :model="userinfo" ref="userinfo" :rules="rules">
               <el-form-item prop="name">
                 <el-input
                   v-model="userinfo.name"
@@ -30,8 +30,30 @@
                 <el-button class="submit" type="primary" @click="submitForm('userinfo')">登录</el-button>
               </el-form-item>
             </el-form>
+            <el-form v-show="isForgetPassword" class="form" :model="retrievePass" ref="retrievePass" :rules="rules">
+              <el-form-item prop="name">
+                <el-input
+                  v-model="retrievePass.name"
+                  prefix-icon="el-icon-user"
+                  placeholder="请输入账号">
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="verifyCode">
+                <el-button class="getcode" type="primary" @click="getVerifyCode">获取短信验证码</el-button>
+                <el-input
+                  class="code-input"
+                  v-model="retrievePass.verifyCode"
+                  minlength="6"
+                  maxlength="6"
+                  placeholder="填写验证码">
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button class="submit" type="primary" @click="submitForm('retrievePass')">立即验证</el-button>
+              </el-form-item>
+            </el-form>
           </el-tab-pane>
-          <el-tab-pane label="企业员工登录" name="second"></el-tab-pane>
+          <el-tab-pane v-if="!isForgetPassword" label="企业员工登录" name="second"></el-tab-pane>
         </el-tabs>
        </div>
      </div>
@@ -50,22 +72,30 @@ export default {
         name: '',
         pass: ''
       },
+      retrievePass: {
+        name: '',
+        verifyCode: ''
+      },
       rules: {
         name: [{ validator: validate, trigger: 'blur' }],
-        pass: [{ validator: validate, trigger: 'blur' }]
+        pass: [{ validator: validate, trigger: 'blur' }],
+        verifyCode: [{ validator: validate, trigger: 'blur' }]
       },
       activeTab: 'first',
-      isFreeLogin: false
+      isFreeLogin: false,
+      isForgetPassword: false
     }
   },
   methods: {
     submitForm(formName) {
-      let info = this.userinfo
+      let info = this[formName]
       if (info.name !== '' && info.pass !== '') {
-        this.registerLogin()
+        this.registerLoginHandler()
+      } else if (info.name !== '' && info.verifyCode !== '') {
+        this.retrievePassHandler()
       }
     },
-    async registerLogin(info) {
+    async registerLoginHandler(info) {
       try {
         let res = await this.$http.post(this.api.login, { user: this.userinfo })
         if (res.errNo === 0) {
@@ -75,11 +105,27 @@ export default {
         console.error(err)
       }
     },
-    handleClick(tab, event) {
-      console.log(tab, event)
+    async retrievePassHandler() {
+      try {
+        let res = await this.$http.post(this.api.retrievepass, { user: this.userinfo })
+        if (res.errNo === 0) {
+          this.$router.push('/order')
+        }
+      } catch (err) {
+        console.error(err)
+      }
     },
     forgetPassword() {
-      console.log('忘记密码跳转')
+      this.resetForm('retrievePass')
+      this.isForgetPassword = true
+      this.activeTab = 'first'
+    },
+    getVerifyCode() {
+      console.log('获取验证码')
+    },
+    resetForm(formName) {
+      console.log(this.$refs)
+      this.$refs[formName].resetFields()
     }
   },
   mounted() {
@@ -129,8 +175,14 @@ export default {
         padding: 22px;
         box-sizing: border-box;
         .el-tabs {
-          /deep/ div.el-tabs__nav {
+          &.main-tab /deep/ div.el-tabs__nav {
             margin-left: 56px;
+          }
+          &.sub-tab /deep/ div.el-tabs__nav {
+            margin-left: 130px;
+            .el-tabs__active-bar {
+              background-color: #E4E7ED;
+            }
           }
           .form {
             margin-top: 30px;
@@ -139,6 +191,9 @@ export default {
             }
             .forgetPassword {
               float: right;
+            }
+            .code-input {
+              width: 164px;
             }
           }
         }
