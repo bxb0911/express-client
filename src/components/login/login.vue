@@ -4,7 +4,7 @@
        <div class="lg-bg"></div>
        <div class="lg-form">
          <el-tabs :class="!isForgetPassword ? 'main-tab' : 'sub-tab'" v-model="activeTab">
-          <el-tab-pane :label="isForgetPassword ? '找    回    密    码' : '丽呈员工登录'" name="first">
+          <el-tab-pane :label="isForgetPassword ? '找 回 密 码' : '丽呈员工登录'" name="first">
             <el-form v-show="!isForgetPassword" class="form" :model="userinfo" ref="userinfo" :rules="rules">
               <el-form-item prop="name">
                 <el-input
